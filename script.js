@@ -31,13 +31,15 @@ async function payOrder(){
     })
     return a;
 }
-async function thankyouFnc(status){
+function thankyouFnc(status){
     if(status.paid === true){
         alert(" Thankyou for eating with us today!");
     }
 } 
 async function getMenu(){
-    const response = await fetch('https://raw.githubusercontent.com/saksham-accio/f2_contest_3/main/food.json');
+    const response = await fetch('https://raw.githubusercontent.com/saksham-accio/f2_contest_3/main/food.json').catch(function(e){
+        console.log(e);
+    });
     const data = await response.json();
     data.forEach(function(e,i){
         const card = document.createElement("div");
@@ -55,10 +57,16 @@ async function getMenu(){
         const cards = document.getElementById("cards");
         cards.appendChild(card);
     });
-    const order = await TakeOrder(data);
+    const order = await TakeOrder(data).catch(function(e){
+        console.log(e);
+    });
 
-    let status = await orderPrep(order);
-    status = await payOrder(status);
+    let status = await orderPrep(order).catch(function(e){
+        console.log(e);
+    });
+    status = await payOrder(status).catch(function(e){
+        console.log(e);
+    });
 
     thankyouFnc(status);
     
